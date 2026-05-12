@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento | Essence Beauty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background-color: #FFFFFF; 
+            font-family: 'Montserrat', sans-serif; 
+            background-image: radial-gradient(at 10% 10%, rgba(212, 175, 55, 0.08) 0px, transparent 50%); 
+        }
+        .serif { font-family: 'Playfair Display', serif; }
+        .gold-text { color: #D4AF37; }
+        
+        .clean-card { 
+            background-color: #FDFDFD; 
+            border: 1px solid rgba(212, 175, 55, 0.15); 
+            box-shadow: 0 15px 35px -12px rgba(212, 175, 55, 0.1); 
+        }
+
+        .form-input { 
+            border: 1px solid rgba(212, 175, 55, 0.2) !important; 
+            transition: 0.3s; 
+        }
+        .form-input:focus { 
+            border-color: #D4AF37 !important; 
+            box-shadow: 0 0 0 1px #D4AF37 !important; 
+            outline: none; 
+        }
+
+        /* Estilo do Calendário IGUAL ao MS7 */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .day-box { 
+            aspect-ratio: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            border: 1px solid #eee; 
+            font-size: 0.85rem; 
+            font-weight: 600; 
+        }
+        .day-free { background: #f0fdf4; color: #166534; border-color: #bbf7d0; } 
+        .day-selected { background: #D4AF37 !important; color: white !important; border-color: #D4AF37 !important; }
+
+        .time-slot { 
+            padding: 12px; 
+            border: 1px solid #f3f4f6; 
+            border-radius: 12px; 
+            text-align: center; 
+            cursor: pointer; 
+            font-size: 0.85rem; 
+            transition: 0.2s; 
+            background: white;
+        }
+        .time-selected { background: #18181b; color: white; border-color: #18181b; }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 30px;
+        }
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            mask-image: linear-gradient(to right, black 75%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%);
+            object-fit: cover;
+        }
+        .carousel-slide.active { opacity: 1; }
+        
+        @media (max-width: 1024px) {
+            .carousel-container { height: 400px; }
+            .carousel-slide {
+                mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+                -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
+
+    <div class="mb-10 flex flex-col items-center text-center">
+        <h1 class="serif text-4xl md:text-5xl gold-text tracking-tighter mb-1">ESSENCE BEAUTY</h1>
+        <p class="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.5em] ml-2">Aqui sua beleza é essencial</p>
+    </div>
+
+    <main class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        
+        <div class="flex flex-col gap-8">
+            <div class="carousel-container shadow-2xl">
+                <img src="FOTO1.jpg" class="carousel-slide active w-full h-full" alt="Cílios 1">
+                <img src="FOTO2.jpg" class="carousel-slide w-full h-full" alt="Cílios 2">
+            </div>
+            <div class="space-y-4">
+                <h2 class="serif text-4xl md:text-5xl text-zinc-900 leading-tight">Realce o poder do <span class="gold-text italic">seu olhar.</span></h2>
+                <p class="text-zinc-500 text-lg border-l-4 border-[#D4AF37] pl-6 italic">"O olhar é a janela da alma."</p>
+            </div>
+        </div>
+
+        <div class="w-full clean-card p-8 md:p-12 rounded-[2.5rem] space-y-8">
+            <div class="text-center">
+                <span class="gold-text text-xs font-black uppercase tracking-[0.3em]">Agendamento Online</span>
+            </div>
+
+            <div class="space-y-4">
+                <div class="relative">
+                    <i class="fa-regular fa-user absolute left-4 top-5 gold-text"></i>
+                    <input id="nome" type="text" placeholder="NOME COMPLETO" class="form-input w-full p-4 pl-12 rounded-2xl uppercase text-[11px] font-black bg-zinc-50/50">
+                </div>
+                <div class="relative">
+                    <i class="fa-brands fa-whatsapp absolute left-4 top-5 gold-text"></i>
+                    <input id="whatsapp_input" type="tel" maxlength="15" oninput="this.value = phoneMask(this.value)" placeholder="(71) 00000-0000" class="form-input w-full p-4 pl-12 rounded-2xl text-[11px] font-black bg-zinc-50/50">
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                    <i class="fa-solid fa-sparkles gold-text"></i> Serviços Disponíveis
+                </label>
+                <div class="grid grid-cols-1 gap-2">
+                    <label class="flex justify-between items-center p-4 rounded-xl border border-zinc-100 hover:border-gold-300 transition-colors cursor-pointer bg-white">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" value="Extensão Clássica" data-price="120" onchange="calcTotal()" class="w-5 h-5 accent-[#D4AF37]">
+                            <span class="text-xs font-bold text-zinc-700 uppercase">Extensão Clássica</span>
+                        </div>
+                        <span class="gold-text font-black text-xs">R$ 120,00</span>
+                    </label>
+                    <label class="flex justify-between items-center p-4 rounded-xl border border-zinc-100 hover:border-gold-300 transition-colors cursor-pointer bg-white">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" value="Volume Russo" data-price="180" onchange="calcTotal()" class="w-5 h-5 accent-[#D4AF37]">
+                            <span class="text-xs font-bold text-zinc-700 uppercase">Volume Russo</span>
+                        </div>
+                        <span class="gold-text font-black text-xs">R$ 180,00</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="p-6 bg-zinc-900 rounded-[2rem] flex justify-between items-center">
+                <span class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Valor Investido:</span>
+                <span id="totalDisplay" class="text-3xl font-black gold-text italic">R$ 0,00</span>
+            </div>
+
+            <div class="space-y-4 pt-4 border-t">
+                <div class="flex items-center justify-center mb-2">
+                    <label class="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-regular fa-calendar gold-text"></i> SELECIONE O DIA
+                    </label>
+                </div>
+                <div id="calendarDays" class="calendar-grid"></div>
+            </div>
+
+            <div id="section-horarios" class="hidden space-y-6 pt-6 border-t border-zinc-100">
+                <p class="text-center text-[10px] font-black text-zinc-400 uppercase tracking-widest">Horários para <span id="display-date" class="gold-text">--/--</span></p>
+                <div id="time-slots" class="grid grid-cols-3 gap-2"></div>
+                <button onclick="finalizar()" class="w-full bg-[#25D366] hover:bg-[#1fb355] text-white font-black py-6 rounded-2xl shadow-xl transition-all uppercase text-[11px] tracking-[0.2em] flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-calendar-check text-lg"></i> Confirmar no WhatsApp
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Lógica do Carrossel
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        function nextSlide() {
+            if(slides.length < 2) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(nextSlide, 4000);
+
+        let dataSel = null, horaSel = null;
+
+        function phoneMask(v) {
+            v = v.replace(/\D/g, "");
+            if (v.length > 11) v = v.substring(0, 11);
+            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+            v = v.replace(/(\d)(\d{4})$/, "$1-$2");
+            return v;
+        }
+
+        function renderCalendar() {
+            const container = document.getElementById('calendarDays');
+            container.innerHTML = '';
+            const hoje = new Date();
+            for(let i=0; i<28; i++) {
+                let d = new Date();
+                d.setDate(hoje.getDate() + i);
+                const box = document.createElement('div');
+                box.className = `day-box day-free`;
+                box.innerText = d.getDate();
+                box.onclick = () => {
+                    document.querySelectorAll('.day-box').forEach(el => el.classList.remove('day-selected'));
+                    box.classList.add('day-selected');
+                    dataSel = d.toLocaleDateString('pt-BR');
+                    mostrarHorarios(dataSel);
+                };
+                container.appendChild(box);
+            }
+        }
+
+        function mostrarHorarios(data) {
+            document.getElementById('section-horarios').classList.remove('hidden');
+            document.getElementById('display-date').innerText = data;
+            const slots = document.getElementById('time-slots');
+            slots.innerHTML = '';
+            ['09:00', '10:30', '13:30', '15:00', '16:30', '18:00'].forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'time-slot font-bold text-zinc-600';
+                div.innerText = h;
+                div.onclick = () => {
+                    document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('time-selected'));
+                    div.classList.add('time-selected');
+                    horaSel = h;
+                };
+                slots.appendChild(div);
+            });
+        }
+
+        function calcTotal() {
+            let t = 0;
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(c => t += parseFloat(c.dataset.price));
+            document.getElementById('totalDisplay').innerText = `R$ ${t.toFixed(2).replace('.', ',')}`;
+        }
+
+        function finalizar() {
+            const nome = document.getElementById('nome').value;
+            const svs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+            const total = document.getElementById('totalDisplay').innerText;
+            if(!nome || !dataSel || !horaSel || svs.length === 0) return alert("Preencha todos os campos! ✨");
+            const msg = `✨ *Novo Agendamento Essence Beauty* ✨\n\n👤 *Cliente:* ${nome.toUpperCase()}\n📅 *Data:* ${dataSel}\n⏰ *Hora:* ${horaSel}\n👁️ *Serviços:* ${svs.join(", ")}\n💰 *Total:* ${total}`;
+            window.location.href = `https://api.whatsapp.com/send?phone=5571996333215&text=${encodeURIComponent(msg)}`;
+        }
+
+        window.onload = renderCalendar;
+    </script>
+</body>
+</html>
