@@ -32,7 +32,6 @@
             outline: none; 
         }
 
-        /* Estilo do Calendário IGUAL ao MS7 */
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
         .day-box { 
             aspect-ratio: 1; 
@@ -79,6 +78,8 @@
             mask-image: linear-gradient(to right, black 75%, transparent 100%);
             -webkit-mask-image: linear-gradient(to right, black 75%, transparent 100%);
             object-fit: cover;
+            /* AJUSTE AQUI: Foca no topo da imagem para não cortar a testa */
+            object-position: top; 
         }
         .carousel-slide.active { opacity: 1; }
         
@@ -174,7 +175,6 @@
     </main>
 
     <script>
-        // Lógica do Carrossel
         let currentSlide = 0;
         const slides = document.querySelectorAll('.carousel-slide');
         function nextSlide() {
@@ -244,8 +244,11 @@
             const svs = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
             const total = document.getElementById('totalDisplay').innerText;
             if(!nome || !dataSel || !horaSel || svs.length === 0) return alert("Preencha todos os campos! ✨");
+            
             const msg = `✨ *Novo Agendamento Essence Beauty* ✨\n\n👤 *Cliente:* ${nome.toUpperCase()}\n📅 *Data:* ${dataSel}\n⏰ *Hora:* ${horaSel}\n👁️ *Serviços:* ${svs.join(", ")}\n💰 *Total:* ${total}`;
-            window.location.href = `https://api.whatsapp.com/send?phone=5571996333215&text=${encodeURIComponent(msg)}`;
+            
+            // Número atualizado aqui
+            window.location.href = `https://api.whatsapp.com/send?phone=5571982488015&text=${encodeURIComponent(msg)}`;
         }
 
         window.onload = renderCalendar;
